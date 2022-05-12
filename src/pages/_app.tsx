@@ -1,9 +1,10 @@
-import "../styles/globals.css";
+import "../../styles/globals.css";
+import "../../styles/reset.css";
 import type { AppProps } from "next/app";
 import type { Liff } from "@line/liff";
 import { useState, useEffect } from "react";
 
-function MyApp({ Component, pageProps }: AppProps) {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   const [liffObject, setLiffObject] = useState<Liff | null>(null);
   const [liffError, setLiffError] = useState<string | null>(null);
 
@@ -15,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       .then((liff) => {
         console.log("LIFF init...");
         liff
-          .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID! })
+          .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID || "" })
           .then(() => {
             console.log("LIFF init succeeded.");
             setLiffObject(liff);
@@ -31,7 +32,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   // to page component as property
   pageProps.liff = liffObject;
   pageProps.liffError = liffError;
-  return <Component {...pageProps} />;
-}
+  return (
+    <>
+      <Component {...pageProps} />
+    </>
+  );
+};
 
 export default MyApp;
