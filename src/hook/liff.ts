@@ -1,4 +1,5 @@
-import type { Liff } from "@line/liff";
+import { Liff } from "@line/liff";
+import LiffMockPlugin from "@line/liff-mock";
 import { useEffect, useState } from "react";
 
 export const useLiff = () => {
@@ -11,9 +12,13 @@ export const useLiff = () => {
     import("@line/liff")
       .then((liff) => liff.default)
       .then((liff) => {
+        liff.use(new LiffMockPlugin());
         console.log("LIFF init...");
         liff
-          .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID || "" })
+          .init({
+            liffId: process.env.NEXT_PUBLIC_LIFF_ID || "",
+            mock: true
+          })
           .then(() => {
             console.log("LIFF init succeeded.");
             setLiffObject(liff);
